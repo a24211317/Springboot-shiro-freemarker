@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.UserDao">
+    <select id="managerLogin" resultMap="administrator">
+        SELECT
+        m.mid,
+        m.mname,
+        m.mobile,
+        m.password,
+        m.create_time,
+        a.authority_id,
+        a.authority_name
+        FROM
+        manager m
+        JOIN manager_authority ma ON m.mid = ma.managerid
+        JOIN authority a ON a.authority_id = ma.authorityId
+        where mobile=#{mobile} and password=#{password} and status=1
+    </select>
+    <select id="getManagerByMobile" resultType="com.hd.knowledge_management.knowledge_management.model.entity.Manager">
+        select * from manager where mobile=#{mobile}
+    </select>
+
+    <select id="userLogin" resultType="com.hd.knowledge_management.knowledge_management.model.entity.Users">
+        select * from users where mobile=#{uname} and password=#{password} and status=1
+    </select>
+
+    <select id="allUser" resultMap="user">
+        select uid,uname, mobile, member, gender, create_time from users where status=1
+    </select>
+
+    <select id="allAdministrator" resultMap="administrator">
+        SELECT
+        m.mid,
+        m.mname,
+        m.mobile,
+        m.password,
+        m.create_time,
+        a.authority_id,
+        a.authority_name
+        FROM
+        manager m
+        JOIN manager_authority ma ON m.mid = ma.managerid
+        JOIN authority a ON a.authority_id = ma.authorityId
+        where status=1
+    </select>
+
+    <update id="updManager">
+        update manager set mname=#{mname},password=#{password} where mid=#{mid} and status=1
+    </update>
+    <update id="delManager">
+        update manager set status=2 where mid=#{mid}
+    </update>
+    <update id="updateVIP">
+        update users set member=1 where uid=#{uid}
+    </update>
+
+    <delete id="delManagerAuthority">
+        DELETE FROM manager_authority WHERE managerid= #{mid}
+    </delete>
+
+    <insert id="addManagerAuthority">
+        insert into manager_authority value(#{mid},#{authority})
+    </insert>
+    <insert id="addManager">
+        insert into manager(mname,mobile,password) value(#{mname},#{mobile},#{password})
+    </insert>
+
+
+    <insert id="register">
+        insert into users(uname,password) value (#{uname},#{password})
+    </insert>
+    <resultMap id="administrator" type="com.hd.knowledge_management.knowledge_management.model.vo.ManagerVo">
+        <result column="create_time" property="createTime"/>
+        <result column="mid" property="mid"/>
+        <result column="mname" property="mname"/>
+        <result column="mobile" property="mobile"/>
+        <result column="password" property="password"/>
+        <collection property="authorityId"
+                    ofType="com.hd.knowledge_management.knowledge_management.model.entity.Authority">
+            <result property="authorityId" column="authority_id"/>
+            <result property="authorityName" column="authority_name"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="user" type="com.hd.knowledge_management.knowledge_management.model.vo.UserVo">
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+</mapper>

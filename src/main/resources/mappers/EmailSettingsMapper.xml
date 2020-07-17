@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.EmailSettingsDao">
+
+    <select id="getEmailSettings" resultType="com.hd.knowledge_management.knowledge_management.model.entity.EmailSettings">
+        select* from email_setting where eid=1
+    </select>
+    <update id="updEmailSettings">
+        update email_setting set email=#{email},server=#{server},username=#{username},pwd=#{pwd},send=#{send}
+        where eid=1
+
+    </update>
+</mapper>

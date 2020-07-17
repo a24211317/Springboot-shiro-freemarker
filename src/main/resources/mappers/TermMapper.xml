@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.TermDao">
+
+    <insert id="addTerm">
+        insert into terms(tno,alias,title,content,version,did,key_word)
+        value (#{tno},#{alias},#{title},#{content},#{version},#{did},#{keyWord})
+    </insert>
+    <select id="getTermByDid" resultMap="termVo">
+        select tno,alias,title,content,version from terms where did=#{did}
+    </select>
+    <select id="getTermsByRid" resultMap="termVo">
+        select t.tid,t.tno,t.alias,t.title,t.content,t.version from terms t JOIN `directory` d on t.did=d.did JOIN
+        regulations r on d.rid=r.rid where r.rid=#{rid}
+    </select>
+    <delete id="delTerm">
+        delete from terms where tid=#{tid}
+    </delete>
+    <resultMap id="termVo" type="com.hd.knowledge_management.knowledge_management.model.vo.TermsVo">
+        <result column="key_word" property="keyWord"/>
+    </resultMap>
+</mapper>

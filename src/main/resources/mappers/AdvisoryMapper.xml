@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.AdvisoryDao">
+    <select id="allAdvisoriess" resultMap="AdvisoryVo">
+        select aid,name, content, create_time, mobile from advisory where status !=0
+    </select>
+    <update id="delAdvisory">
+    update advisory set status=0 where aid=#{aid}
+</update>
+
+    <select id="getAdvisorymangementByAid" resultMap="AdvisoryDetailVo">
+        select a.name,a.content,a.mobile,t.alias from advisory a JOIN terms t on a.terms=t.tid
+        where a.aid=#{aid}
+    </select>
+
+    <resultMap id="AdvisoryDetailVo" type="com.hd.knowledge_management.knowledge_management.model.vo.AdvisoryDetailVo">
+        <result column="alias" property="termName"></result>
+    </resultMap>
+
+    <resultMap id="AdvisoryVo" type="com.hd.knowledge_management.knowledge_management.model.vo.AdvisoryVo">
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+</mapper>

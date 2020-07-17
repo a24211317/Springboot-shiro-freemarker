@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.WebSettingsDao">
+
+    <select id="getWebSetting" resultType="com.hd.knowledge_management.knowledge_management.model.entity.WebSetting">
+        select* from web_setting where webid=1
+    </select>
+    <update id="updWebSetting">
+        update web_setting set title=#{title},domain=#{domain},
+        <if test="logo != ''">
+                logo=#{logo},
+        </if>
+        email=#{email},status=#{status}
+        where webid=1
+
+    </update>
+</mapper>

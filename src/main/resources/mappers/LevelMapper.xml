@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.LevelDao">
+    <select id="getLevelByLevel" resultType="com.hd.knowledge_management.knowledge_management.model.entity.Level">
+        select * from level where level=#{level}
+    </select>
+
+    <select id="getLevelByParentId" resultType="com.hd.knowledge_management.knowledge_management.model.entity.Level">
+        select * from level where parent_id =#{pid}
+    </select>
+    <select id="allLevel" resultType="com.hd.knowledge_management.knowledge_management.model.entity.Level">
+        select * from level
+    </select>
+    <delete id="delLevel">
+        delete  from level where lid=#{lid}
+    </delete>
+
+</mapper>

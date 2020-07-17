@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.knowledge_management.knowledge_management.dao.RegulationDao">
+    <select id="allRegulations" resultType="com.hd.knowledge_management.knowledge_management.model.vo.RegulationsVo">
+        SELECT
+        r.rid,
+        r.rno,
+        r.alias,
+        r.version,
+        r.rname,
+        r.`status`,
+        l.content as level
+        FROM
+        regulations r
+        LEFT JOIN `level` l ON r.level_id = l.lid
+        WHERE
+        STATUS != 0
+        <if test="lid!=''">
+            and level_id=#{lid}
+        </if>
+    </select>
+
+    <select id="getRegulationByRid" resultMap="regulationDetailsVo">
+        SELECT r.*,b.levelTWO,b.levelONE,b.oneId,b.twoId FROM regulations r
+        JOIN (
+        SELECT a.lid twoId,b.lid oneId,a.content AS levelTWO,b.content AS levelONE
+        FROM `level` a
+        INNER JOIN `level` b ON a.parent_id = b.lid) b ON r.level_id = b.twoId
+        where `status` !=0 and rid=#{rid}
+    </select>
+
+    <insert id="addRegulation">
+        insert into
+        regulations(rno,alias,version,rname,status,level_id,icon,pdf_name,pdf_link,description)
+        value
+        (#{rno},#{alias},#{version},#{rname},#{status},#{levelId},#{icon},#{pdfName},#{pdfLink},#{description})
+    </insert>
+    <update id="delRegulation">
+        update regulations set status = 0 where rid=#{rid}
+    </update>
+
+    <update id="updRegulation">
+        update regulations set
+        rno=#{rno},alias=#{alias}, icon=#{icon}, version=#{version}, rname=#{rname}, status=#{status}
+        , pdf_name=#{pdfName},level_id=#{levelId},pdf_link=#{pdfLink}, description=#{description}
+        where rid=#{rid}
+    </update>
+    <resultMap id="regulationDetailsVo"
+               type="com.hd.knowledge_management.knowledge_management.model.vo.RegulationDetailsVo">
+        <result column="pdf_name" property="pdfName"/>
+        <result column="pdf_link" property="pdfLink"/>
+    </resultMap>
+</mapper>
